@@ -39,6 +39,9 @@ class CountryPickerWidget extends StatefulWidget {
   ///Can be set to `true` for using Turkish names. Default set to `false`
   final bool useTurkishNames;
 
+  ///Can be set to `true` for showing the calling code. Default set to `true`
+  final bool showCallingCode;
+
   const CountryPickerWidget({
     Key? key,
     this.onSelected,
@@ -50,6 +53,7 @@ class CountryPickerWidget extends StatefulWidget {
     this.showSeparator = false,
     this.focusSearchBox = false,
     this.useTurkishNames = false,
+    this.showCallingCode = true,
   }) : super(key: key);
 
   @override
@@ -203,7 +207,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                             ),
                             Expanded(
                                 child: Text(
-                              '${_filteredList[index].callingCode} ${widget.useTurkishNames ? _filteredList[index].nameTurkish : _filteredList[index].name}',
+                              '${widget.showCallingCode ? _filteredList[index].callingCode + ' ' : ''}${widget.useTurkishNames ? _filteredList[index].nameTurkish : _filteredList[index].name}',
                               style: widget.itemTextStyle,
                             )),
                           ],

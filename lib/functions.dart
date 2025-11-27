@@ -45,7 +45,8 @@ Future<Country?> showCountryPickerSheet(BuildContext context,
     double cornerRadius = 35,
     bool focusSearchBox = false,
     double heightFactor = 0.9,
-    bool useTurkishNames = false}) {
+    bool useTurkishNames = false,
+    bool showCallingCode = true}) {
   assert(heightFactor <= 0.9 && heightFactor >= 0.4,
       'heightFactor must be between 0.4 and 0.9');
   return showModalBottomSheet<Country?>(
@@ -90,6 +91,7 @@ Future<Country?> showCountryPickerSheet(BuildContext context,
                 child: CountryPickerWidget(
                   onSelected: (country) => Navigator.of(context).pop(country),
                   useTurkishNames: useTurkishNames,
+                  showCallingCode: showCallingCode,
                 ),
               ),
             ],
@@ -104,6 +106,7 @@ Future<Country?> showCountryPickerDialog(
   double cornerRadius = 35,
   bool focusSearchBox = false,
   bool useTurkishNames = false,
+  bool showCallingCode = true,
 }) {
   return showDialog<Country?>(
       context: context,
@@ -144,6 +147,7 @@ Future<Country?> showCountryPickerDialog(
                   child: CountryPickerWidget(
                     onSelected: (country) => Navigator.of(context).pop(country),
                     useTurkishNames: useTurkishNames,
+                    showCallingCode: showCallingCode,
                   ),
                 ),
               ],
