@@ -36,6 +36,9 @@ class CountryPickerWidget extends StatefulWidget {
   ///This will change the hint of the search box. Alternatively [searchInputDecoration] can be used to change decoration fully.
   final String searchHintText;
 
+  ///Can be set to `true` for using Turkish names. Default set to `false`
+  final bool useTurkishNames;
+
   const CountryPickerWidget({
     Key? key,
     this.onSelected,
@@ -46,6 +49,7 @@ class CountryPickerWidget extends StatefulWidget {
     this.flagIconSize = 32,
     this.showSeparator = false,
     this.focusSearchBox = false,
+    this.useTurkishNames = false,
   }) : super(key: key);
 
   @override
@@ -71,6 +75,9 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
         _filteredList = _list
             .where((element) =>
                 element.name
+                    .toLowerCase()
+                    .contains(text.toString().toLowerCase()) ||
+                element.nameTurkish
                     .toLowerCase()
                     .contains(text.toString().toLowerCase()) ||
                 element.callingCode
@@ -102,6 +109,11 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
       _isLoading = true;
     });
     _list = await getCountries(context);
+    if (widget.useTurkishNames) {
+      _list.sort((a, b) => a.nameTurkish.compareTo(b.nameTurkish));
+    } else {
+      _list.sort((a, b) => a.name.compareTo(b.name));
+    }
     try {
       String? code = await FlutterSimCountryCode.simCountryCode;
       _currentCountry =
@@ -112,7 +124,8 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
             (element) => element.callingCode == country.callingCode);
         _list.insert(0, country);
       }
-    } catch (e) {} finally {
+    } catch (e) {
+    } finally {
       setState(() {
         _filteredList = _list.map((e) => e).toList();
         _isLoading = false;
@@ -190,7 +203,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                             ),
                             Expanded(
                                 child: Text(
-                              '${_filteredList[index].callingCode} ${_filteredList[index].name}',
+                              '${_filteredList[index].callingCode} ${widget.useTurkishNames ? _filteredList[index].nameTurkish : _filteredList[index].name}',
                               style: widget.itemTextStyle,
                             )),
                           ],
